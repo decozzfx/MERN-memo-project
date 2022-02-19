@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
 import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@material-ui/core'
+import {GoogleLogin} from 'react-google-login'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import useStyles from './styles'
 import Input from './Input'
+import Icon from './Icon'
 
 const Auth = () => {
     const classes = useStyles()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [showPassword, setShowPassword] = useState(false)
     const [isSignup, setIsSignup] = useState(false)
@@ -24,6 +30,23 @@ const Auth = () => {
     function switchMode() {
         setIsSignup(!isSignup)
         setShowPassword(false)
+    }
+
+    const googleSuccess = async (res) => {
+        const result = res?.profileObj
+        const token = res?.tokenId
+
+        try {
+            dispatch({ type : 'AUTH', payload : {result, token} })
+
+            navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const googleFailure = (error) => {
+        console.log('Google Sign In was unsuccessful, Try Again Later '+error)
     }
 
   return (
@@ -50,6 +73,25 @@ const Auth = () => {
                 <Button type='submit' fullWidth variant='contained' color='primary' className={classes.submit}>
                     { isSignup ? 'Sign Up' : 'Sign In'}
                 </Button>
+                <GoogleLogin 
+                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                    render={(renderProps) => (
+                        <Button 
+                        className={classes.googleButton} 
+                        color='primary'
+                        fullWidth 
+                        onClick={renderProps.onClick} 
+                        disabled={renderProps.disabled} 
+                        startIcon={<Icon />} 
+                        variant='contained'
+                        >
+                            Google Sign In
+                        </Button>
+                    )}
+                    onSuccess={googleSuccess}
+                    onFailure={googleFailure}
+                    cookiePolicy='single_host_origin'
+                />
                 <Grid container justifyContent='flex-end'>
                     <Grid item>
                         <Button onClick={switchMode}>
@@ -60,7 +102,7 @@ const Auth = () => {
             </form>
         </Paper>
     </Container>
-  )
+  );
 }
 
 export default Auth
