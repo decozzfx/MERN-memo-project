@@ -6,14 +6,11 @@ import { useSelector } from 'react-redux'
 import useStyles from './styles'
 import { createPost, updatePost } from '../../actions/posts'
 
-const Form = ({ currentId, setCurrentId, dispatch }) => {
+const Form = ({ currentId, setCurrentId, dispatch, user }) => {
     const classes = useStyles()
     const [ postData, setPostData] = useState({ title : '', message : '', tags : '', selectedFile: '', })
     const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null ) // posts is from reducer
-    const user = JSON.parse(localStorage.getItem('profile'))
-
-
-    // console.log(postData)
+    // console.log(user)
 
     useEffect(() => {
         if(post) setPostData(post)

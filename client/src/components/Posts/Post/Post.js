@@ -15,7 +15,7 @@ const Post = ({ post, setCurrentId }) => {
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('profile'))
 
-    console.log(post)
+    // console.log(post)
 
     const Likes = () => {
         if(post.likes.length > 0){

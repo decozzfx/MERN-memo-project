@@ -30,7 +30,7 @@ const Auth = () => {
             dispatch(signin(formData, navigate))
         }
 
-        console.log(formData)
+        // console.log(formData)
     }
 
     const handleChange = (e) => {

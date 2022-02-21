@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container, Grow, Grid } from '@material-ui/core'
-import { useDispatch } from "react-redux";
 
-import { getPosts } from '../../actions/posts'
+
 import Posts from '../Posts/Posts'
 import Form from "../Form/Form";
 
-const Home = () => {
-    const [currentId, setCurrentId] = useState(0)
-    const dispatch = useDispatch()
+const Home = ({ dispatch, currentId, setCurrentId, user }) => {
 
-    useEffect(() => {
-        dispatch(getPosts());
-      }, [currentId, dispatch])
+    // console.log(user)
     return (
         <Grow in >
             <Container>
@@ -21,7 +16,7 @@ const Home = () => {
                         <Posts setCurrentId={setCurrentId} />
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <Form currentId={currentId} dispatch={dispatch} setCurrentId={setCurrentId} />
+                        <Form currentId={currentId} dispatch={dispatch} setCurrentId={setCurrentId} user={user} />
                     </Grid>
                 </Grid>
             </Container>

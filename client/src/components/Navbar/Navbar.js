@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { AppBar, Typography, Toolbar, Avatar, Button } from '@material-ui/core'
 import { useDispatch } from "react-redux";
@@ -8,9 +8,8 @@ import useStyles from './styles'
 import memories from '../../images/memories.png'
 
 
-const Navbar = () => {
+const Navbar = ({ user, setUser }) => {
     const classes = useStyles()
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const location = useLocation()
