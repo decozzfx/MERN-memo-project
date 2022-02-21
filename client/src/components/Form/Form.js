@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { TextField, Button, Typography, Paper } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
 import FileBase from 'react-file-base64'
 import { useSelector } from 'react-redux'
 
 import useStyles from './styles'
-import { createPost, updatePost, getPosts } from '../../actions/posts'
+import { createPost, updatePost } from '../../actions/posts'
 
-const Form = ({ currentId, setCurrentId }) => {
+const Form = ({ currentId, setCurrentId, dispatch }) => {
     const classes = useStyles()
-    const [ postData, setPostData] = useState({ creator : '', title : '', message : '', tags : '', selectedFile: '', })
+    const [ postData, setPostData] = useState({ title : '', message : '', tags : '', selectedFile: '', })
     const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null ) // posts is from reducer
+    const user = JSON.parse(localStorage.getItem('profile'))
 
-    const dispatch = useDispatch()
+
+    // console.log(postData)
 
     useEffect(() => {
         if(post) setPostData(post)
@@ -23,31 +24,32 @@ const Form = ({ currentId, setCurrentId }) => {
 
         if(currentId){
 
-            dispatch(updatePost(currentId, postData))
+            dispatch(updatePost(currentId, { ...postData, name : user?.result?.name })) // name = post name of user as creator
         }else{
-            dispatch(createPost(postData))
+            dispatch(createPost({ ...postData, name : user?.result?.name }))
         }
         clear()
-        dispatch(getPosts())
+    }
+
+    if(!user?.result?.name){
+        return (
+            <Paper className={classes.paper} >
+                <Typography variant='h6' align='center' >
+                    Please Sign In to create moments and like other's moments
+                </Typography>
+            </Paper>
+        )
     }
 
     const clear = () => {
         setCurrentId(0)
-        setPostData({ creator : '', title : '', message : '', tags : '', selectedFile: '', })
+        setPostData({ title : '', message : '', tags : '', selectedFile: '', })
     }
 
   return (
         <Paper className={classes.paper}>
             <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant='h6'>{ currentId ? 'Editing' : 'Creating'} a Memory</Typography>
-                <TextField 
-                name='creator' 
-                variant='outlined' 
-                label='Creator' 
-                fullWidth 
-                value={postData.creator} 
-                onChange={(e) => setPostData({ ...postData, creator : e.target.value })} 
-                />
                 <TextField 
                 name='title' 
                 variant='outlined' 

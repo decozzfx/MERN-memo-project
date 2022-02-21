@@ -13,9 +13,10 @@ export const getPosts = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const { title, message, selectedFile, creator, tags } = req.body;
+    const post = req.body;
+    // console.log(req)
 
-    const newPostMessage = new PostMessage({ title, message, selectedFile, creator, tags })
+    const newPostMessage = new PostMessage({ ...post, creator : req.userId, createdAt : new Date().toISOString() }) // creator automaticly specify the creator of specify post , //toIsoString to make sure Date show the value when it was created
 
     try {
         await newPostMessage.save();
@@ -59,7 +60,7 @@ export const likePost = async (req, res) => {
     //check if userId is already like the post or yet
     const index = post.likes.findIndex((id) => id === String(req.userId)) //if that case id already in there that mean that id already like the post 
 
-    if( index = -1){ // if the id isn't in index 
+    if( index == -1){ // if the id isn't in index 
         post.likes.push(req.userId) // like a post
     } else {
         post.likes = post.likes.filter((id) => id !== String(req.userId)) // return array of the likes beside id that likes

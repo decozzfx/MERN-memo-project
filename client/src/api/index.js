@@ -2,6 +2,16 @@ import axios from 'axios'
 
 const API = axios.create({ baseURL : 'http://localhost:5000' })
 
+// adding auth middleware, adding something each request
+// have to send token to the backend to verify for login status
+API.interceptors.request.use((req) => {
+    if(localStorage.getItem('profile')){
+        req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+    }
+
+    return req
+})
+
 // const url = 'https://post-moment-app.herokuapp.com/posts'
 const postsRoute = '/posts'
 const usersRoute = '/user'
