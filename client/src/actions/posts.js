@@ -1,9 +1,11 @@
 import * as api from '../api'
 import { FETCH_ALL, CREATE, DELETE, UPDATE, LIKE, FETCH_BY_SEARCH } from '../constant/actionTypes'
 
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (page) => async (dispatch) => {
     try {
-        const { data } = await api.fetchPosts()
+        const { data } = await api.fetchPosts(page)
+
+        console.log(data)
 
         dispatch({ type : FETCH_ALL , payload : data })
     } catch (error) {
@@ -37,7 +39,7 @@ export const createPost = (post) => async (dispatch) => {
       
       dispatch({ type : UPDATE, payload : data })
       
-      dispatch(getPosts())
+      dispatch(getPosts(1))
     } catch (error) {
       console.log(error)      
   }
@@ -58,7 +60,7 @@ export const likePost = (id) => async (dispatch) => {
     const { data } = await api.likePost(id)
 
     dispatch({ type : LIKE , payload : data })
-    dispatch(getPosts())
+    dispatch(getPosts(1))
   } catch (error) {
     console.log(error)
   }

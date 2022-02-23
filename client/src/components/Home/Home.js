@@ -23,8 +23,8 @@ const Home = ({ dispatch, currentId, setCurrentId, user }) => {
     const [search, setSearch] = useState('')
     const [tags, setTags] = useState([])
 
-    console.log(page)
-    console.log(searchQuery)
+    // console.log(page)
+    // console.log(searchQuery)
     // console.log(tags)
     // console.log(search)
 
@@ -80,7 +80,7 @@ const Home = ({ dispatch, currentId, setCurrentId, user }) => {
                         </AppBar>
                         <Form currentId={currentId} dispatch={dispatch} setCurrentId={setCurrentId} user={user} />
                         <Paper elevation={6}>
-                            <Pagination />
+                            <Pagination page={page} />
                         </Paper>
                     </Grid>
                 </Grid>

@@ -6,13 +6,13 @@ import Post from './Post/Post'
 import useStyles from './styles'
 
 const Posts = ({ setCurrentId }) => {
-    const posts = useSelector((state) => state.posts) // posts is from reducer
+    const { posts } = useSelector((state) => state.posts) // posts is from reducer // [] -> { posts : [] } 
     const classes = useStyles()
 
     // console.log(posts)
 
   return (
-      !posts.length ? <CircularProgress /> : (
+      !posts?.length ? <CircularProgress /> : (
         <Grid className={classes.container} container alignItems='stretch' spacing={3}>
           {posts.map((post, id) => (
             <Grid key={id} item xs={12} sm={12} md={6} lg={3}>
