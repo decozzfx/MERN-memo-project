@@ -12,6 +12,25 @@ export const getPosts = async (req, res) => {
     }
 }
 
+// params and query actually is deferent thing
+// Query -> /posts?page=1 -> page = 1               // for query some data, like search, some fetch data, etc
+// Params => /posts/:id -> /posts/123 -> id = 123  // to get specifict resource data  
+
+export const getPostsBySearch = async (req, res) => {
+    const { searchQuery, tags } = req.query
+    // console.log(tags)
+    try {
+        const title = new RegExp(searchQuery, 'i') // RegExp -> regular expression // i stand for ignore case , Test test tesT -> test
+        
+        const posts = await PostMessage.find({ $or: [ { title },{ tags: { $in : tags.split(',') } } ]})  // $or -> eather find title or tags , so find the post that match eather or // $in -> in the array are matches for query
+
+        res.status(200).json({ data : posts })
+
+    } catch (error) {
+        res.status(404).json({ message : error.message })
+    }
+}
+
 export const createPost = async (req, res) => {
     const post = req.body;
     // console.log(req)

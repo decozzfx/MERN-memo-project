@@ -8,22 +8,25 @@ import Form from "../Form/Form";
 import Pagination from "../Pagination";
 import useStyles from './styles'
 
+import { getPostBySearch } from "../../actions/posts";
+
 function useQuery(){
     return new URLSearchParams(useLocation().search) // setup url search params for to know which page currently on and what's search looking for 
 }
 
 const Home = ({ dispatch, currentId, setCurrentId, user }) => {
     const classes = useStyles()
-    const query = useQuery()    // bring page info form
+    const query = useQuery()    // get query
     const navigate = useNavigate()
     const page = query.get('page') || 1 // read url and see what we have a parameter in there
     const searchQuery = query.get('searchQuery') 
     const [search, setSearch] = useState('')
     const [tags, setTags] = useState([])
 
-    console.log(tags)
     console.log(page)
     console.log(searchQuery)
+    // console.log(tags)
+    // console.log(search)
 
     function handleKeyPress(e) {
         if(e.keyCode === 13){ //e.keyCode === 13 its mean the ENTER keypress
@@ -36,8 +39,11 @@ const Home = ({ dispatch, currentId, setCurrentId, user }) => {
     const handleDeleteTag = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete ))
 
     const handleSearchPost = () => {
-        if(search.trim()){ // trim() to make sure there's no space in the state
-            // dispatch fetch search post
+        if(search.trim() || tags){ // trim() to make sure there's no space in the state
+            dispatch(getPostBySearch({ search, tags: tags.join(',') })) // convert to string type we can't pass an array through the url parameter
+            
+            // set frontend route for search specific term so can share or use for relevant information
+            navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`)
         }else{
             navigate('/')
         }
