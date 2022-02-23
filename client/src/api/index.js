@@ -17,6 +17,7 @@ const postsRoute = '/posts'
 const usersRoute = '/user'
 
 export const fetchPosts = (page) => API.get(`${postsRoute}?page=${page}`)
+export const fetchPost = (id) => API.get(`${postsRoute}/${id}`)
 export const fetchPostBySearch = (searchQuery) => API.get(`${postsRoute}/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`)
 export const createPost = (newPost) => API.post(postsRoute, newPost)
 export const likePost = (id) => API.patch(`${postsRoute}/${id}/likepost`)
